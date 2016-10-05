@@ -9,6 +9,8 @@ filetype plugin indent on
 
 colorscheme seti
 hi Normal ctermbg=none
+hi NonText ctermbg=none
+hi LineNr ctermbg=none ctermfg=0
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
