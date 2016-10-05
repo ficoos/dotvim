@@ -31,7 +31,7 @@ let g:go_list_type = "quickfix"
 
 let g:go_fmt_command = "goimports"
 
-nmap <leader>f :bnext<CR>
+nmap <leader>n :bnext<CR>
 nmap <leader>b :bprevious<CR>
 
 au FileType go nmap <leader>r <Plug>(go-run)
