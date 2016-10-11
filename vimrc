@@ -18,9 +18,6 @@ inoremap jk <ESC>
 
 let mapleader = "\<Space>"
 
-nmap <leader>p :CtrlPMixed<CR>
-nmap <leader>P :CtrlPBuffer<CR>
-
 nmap <leader>l :set invrelativenumber<CR>
 
 map <leader>ws :split<CR>
@@ -70,6 +67,11 @@ hi Pmenu ctermbg=8
 set colorcolumn=81
 set noshowmode
 
+" CTRLP
+
+nmap <leader>p :CtrlPMixed<CR>
+nmap <leader>P :CtrlPBuffer<CR>
+
 " NEOCOMPLETE
 
 let g:neocomplete#enable_at_startup = 1
@@ -113,21 +115,6 @@ endif
 " ECHODOC
 
 let g:echodoc_enable_at_startup = 1
-
-" NERDTREE
-
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd vimenter * NERDTree
-autocmd vimenter * wincmd p
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-nmap <leader>tf :NERDTreeToggle<CR>
-
-
-" TAGBAR
-
-nmap <leader>tt :TagbarToggle<CR>
 
 " AIRLINE
 
