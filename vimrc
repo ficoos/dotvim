@@ -8,6 +8,9 @@ set hidden
 set mouse=a
 set encoding=utf-8
 
+set relativenumber 
+set number
+
 syntax on
 filetype plugin indent on
 
@@ -15,21 +18,45 @@ inoremap jk <ESC>
 
 let mapleader = "\<Space>"
 
-nmap <leader>p <C-p>
+nmap <leader>p :CtrlPMixed<CR>
+nmap <leader>P :CtrlPBuffer<CR>
 
-nmap <leader>bn :bnext<CR>
-nmap <leader>bp :bprevious<CR>
-nmap <leader>bd :bd
-nmap <leader>bD :bd<CR>
+nmap <leader>l :set invrelativenumber<CR>
 
-nmap <leader>ss :noautocmd vim // **/*<left><left><left><left><left><left>
-nmap <leader>so :copen<CR>
-nmap <leader>sc :cclose<CR>
-nmap <leader>s0 :cfirst<CR>
-nmap <leader>sn :cnext<CR>
-nmap <leader>sN :cprev<CR>
-nmap <leader>sf :cnfile<CR>
-nmap <leader>sF :cpfile<CR>
+map <leader>ws :split<CR>
+map <leader>wv :vsplit<CR>
+map <leader>wc :q<CR>
+map <leader>wC :q!<CR>
+map <leader>wh <C-w><C-h>
+map <leader>wj <C-w><C-j>
+map <leader>wk <C-w><C-k>
+map <leader>wl <C-w><C-l>
+
+map <leader>tn :tabnew<CR>
+map <leader>tc :tabclose<CR>
+map <leader>th :tabnext<CR>
+map <leader>tl :tabprev<CR>
+
+nmap <leader>bl :bnext<CR>
+nmap <leader>bh :bprevious<CR>
+nmap <leader>bc :bd<CR>
+
+nmap <leader>s :copen \| noautocmd vim // **/*<left><left><left><left><left><left>
+
+nmap <leader>co :copen<CR>
+nmap <leader>cc :cclose<CR>
+nmap <leader>c0 :cfirst<CR>
+nmap <leader>cn :cnext<CR>
+nmap <leader>cN :cprev<CR>
+nmap <leader>cf :cnfile<CR>
+nmap <leader>cF :cpfile<CR>
+
+nmap <leader>lo :lopen<CR>
+nmap <leader>lc :lclose<CR>
+nmap <leader>l0 :lfirst<CR>
+nmap <leader>ln :lnext<CR>
+nmap <leader>lN :lprev<CR>
+nmap <leader>lf :lnfile<CR>
 
 " APPEARANCE
 
@@ -46,6 +73,7 @@ set noshowmode
 " NEOCOMPLETE
 
 let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_auto_select = 1
 set completeopt-=preview
 
 if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -56,15 +84,13 @@ let g:neocomplete#sources#omni#input_patterns.go = '\h\w*\.\?'
 
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-	return pumvisible() ? "\<C-y>" : "\<CR>"
+	return pumvisible()
+		\ ? "\<C-y>"
+		\ : delimitMate#ExpandReturn()
 endfunction
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-
-" ECHODOC
-
-let g:echodoc_enable_at_startup = 1
 
 " NEOSNIPPET
 
@@ -74,18 +100,19 @@ let g:neosnippet#disable_runtime_snippets = {
 \   '_' : 1,
 \ }
 
-imap <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
-xmap <C-k> <Plug>(neosnippet_expand_target)
-
-imap <expr><TAB>
-\ pumvisible() ? "\<C-n>" :
-\ neosnippet#expandable_or_jumpable() ?
-\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+imap <expr><TAB> pumvisible()
+	\ ? "\<C-n>"
+	\ : neosnippet#expandable_or_jumpable()
+		\ ? "\<Plug>(neosnippet_expand_or_jump)"
+		\ : "\<TAB>"
 
 if has('conceal')
 	set conceallevel=2 concealcursor=niv
-endif"
+endif
+
+" ECHODOC
+
+let g:echodoc_enable_at_startup = 1
 
 " NERDTREE
 
@@ -139,9 +166,40 @@ set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
+
+" EDITORCONFIG
+
+let g:EditorConfig_core_mode = 'external_command'
+
+" GOLANG
+
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:go_list_type = "quickfix"
+let g:go_fmt_command = "goimports"
+
+let g:go_snippet_engine = "neosnippet"
+let g:go_loaded_gosnippets = 1
+
+au FileType go nmap <leader>mr <Plug>(go-run)
+au FileType go nmap <leader>mt <Plug>(go-test)
+au FileType go nmap <leader>mc <Plug>(go-coverage-toggle)
+au FileType go nmap <Leader>md <Plug>(go-def)
+au FileType go nmap <Leader>mg <Plug>(go-doc)
+au FileType go nmap <Leader>mb <Plug>(go-doc-browser)
+au FileType go nmap <Leader>mi <Plug>(go-implements)
+au FileType go nmap <Leader>me <Plug>(go-rename)
+au FileType go nmap <Leader>ma <Plug>(go-alternate-edit)
+au FileType go nmap <Leader>ms :GoDeclsDir<CR>
+
+" JAVASCRIPT
+
+let g:syntastic_javascript_checkers = ['eslint']
+
+" workaround nerdtree/syntastic compatibility issue
+noremap :w<CR> :w<CR>:SyntasticCheck<CR>
