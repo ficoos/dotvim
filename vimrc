@@ -172,7 +172,8 @@ let g:go_loaded_gosnippets = 1
 
 au FileType go nmap <leader>mr <Plug>(go-run)
 au FileType go nmap <leader>mt <Plug>(go-test)
-au FileType go nmap <leader>mc <Plug>(go-coverage-toggle)
+" GoCoverageToggle messes up colors, so reload vimrc
+au FileType go nmap <leader>mc :GoCoverageToggle<CR>:colorscheme seti<CR>
 au FileType go nmap <Leader>md <Plug>(go-def)
 au FileType go nmap <Leader>mg <Plug>(go-doc)
 au FileType go nmap <Leader>mb <Plug>(go-doc-browser)
