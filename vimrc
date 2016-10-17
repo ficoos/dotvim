@@ -155,6 +155,14 @@ set statusline+=%*
 
 let g:EditorConfig_core_mode = 'external_command'
 
+" TEXT
+
+au FileType text nmap <leader>mt :set filetype=help<CR>
+
+" HELP
+
+au FileType help nmap <leader>mt :set filetype=text<CR>
+
 " GOLANG
 
 let g:syntastic_check_on_open = 1
@@ -173,7 +181,7 @@ let g:go_loaded_gosnippets = 1
 au FileType go nmap <leader>mr <Plug>(go-run)
 au FileType go nmap <leader>mt <Plug>(go-test)
 " GoCoverageToggle messes up colors, so reload vimrc
-au FileType go nmap <leader>mc :GoCoverageToggle<CR>:colorscheme seti<CR>
+au FileType go nmap <leader>mc :GoCoverageToggle<CR>:so $MYVIMRC<CR>
 au FileType go nmap <Leader>md <Plug>(go-def)
 au FileType go nmap <Leader>mg <Plug>(go-doc)
 au FileType go nmap <Leader>mb <Plug>(go-doc-browser)
